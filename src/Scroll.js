@@ -2,29 +2,30 @@ import React, { useRef, useEffect, useState } from 'react';
 
 const ScrollPositionComponent = () => {
     const targetRef = useRef(null);
-
+    const [_text, _setText] = useState("Scroll Position Tracking");
 
     const handleScroll = () => {
         const scrollPosition = window.scrollY || window.pageYOffset;
-        const targetTop = targetRef.current.getBoundingClientRect().top
+        const targetTop = targetRef.current.offsetTop - 100;
+        //offset().top
         if (targetTop < scrollPosition) {
             console.log("스크롤 드디어 닿음", targetTop)
             targetRef.current.style.backgroundColor = "red";
+            _setText("changed!!!")
         } else {
             targetRef.current.style.backgroundColor = "white";
+            _setText("Scroll Position Tracking")
         }
     };
 
-    // Attach the scroll event listener
+
     useEffect(() => {
 
         const targetElement = targetRef.current;
-
         if (targetElement) {
             window.addEventListener('scroll', handleScroll);
         }
 
-        // Clean up the event listener on component unmount
         return () => {
             if (targetElement) {
                 window.removeEventListener('scroll', handleScroll);
@@ -34,10 +35,7 @@ const ScrollPositionComponent = () => {
 
     return (
         <div ref={targetRef} style={{ border: '1px solid #ccc' }}>
-            <h2>Scroll Position Tracking</h2>
-            {/* <p>Scroll Position: {scrollPosition}</p> */}
-
-            {/* Your content goes here */}
+            <h2>{_text}</h2>
             <div style={{ height: '1000px' }}>Scroll down to see the effect</div>
         </div>
     );
